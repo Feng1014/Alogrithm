@@ -60,8 +60,25 @@ public class RobotWalk {
         return ans;
     }
 
+    public static int ways2(int N, int start, int aim, int K) {
+        if (N < 2 || start < 1 || start > N || aim < 1 || aim > N || K < 1) {
+            return -1;
+        }
+        int[][] dp = new int[N + 1][K + 1];
+        dp[aim][0] = 1;
+        for (int rest = 1; rest <= K; rest++) {
+            dp[1][rest] = dp[2][rest - 1];
+            for (int cur = 2; cur <= N - 1; cur++) {
+                dp[cur][rest] = dp[cur - 1][rest - 1] + dp[cur + 1][rest - 1];
+            }
+            dp[N][rest] = dp[N - 1][rest - 1];
+        }
+        return dp[start][K];
+    }
+
     public static void main(String[] args) {
         System.out.println(ways(4, 2, 4, 4));
         System.out.println(ways1(4, 2, 4, 4));
+        System.out.println(ways2(4, 2, 4, 4));
     }
 }
