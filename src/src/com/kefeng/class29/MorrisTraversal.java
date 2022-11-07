@@ -108,6 +108,7 @@ public class MorrisTraversal {
 
     /**
      * morris后序遍历
+     *
      * @param node
      */
     public static void morrisPos(Node node) {
@@ -161,6 +162,43 @@ public class MorrisTraversal {
         return pre;
     }
 
+    /**
+     * morris遍历一棵树是否二叉搜索树。二叉搜索树的中序遍历是有序序列。
+     * @param node
+     * @return
+     */
+    public static boolean isBST(Node node) {
+        if (node == null) {
+            return true;
+        }
+        Node cur = node;
+        Node mostRight = null;
+        Integer pre = null;
+        boolean ans = true;
+        while (cur != null) {
+            mostRight = cur.left;
+            if (mostRight != null) {
+                while (mostRight.right != null && mostRight.right != cur) {
+                    mostRight = mostRight.right;
+                }
+                if (mostRight.right == null) {
+                    mostRight.right = cur;
+                    cur = cur.left;
+                    continue;
+                } else {
+                    mostRight.right = null;
+                }
+            }
+            /**如果之前节点不为空且之前节点的值大于当前节点的值，则说明这棵树不是二叉搜索树*/
+            if (pre != null && pre >= cur.data) {
+                ans = false;
+            }
+            pre = cur.data;
+            cur = cur.right;
+        }
+        return ans;
+    }
+
     public static void main(String[] args) {
         Node head = new Node(1);
         head.left = new Node(2);
@@ -172,6 +210,7 @@ public class MorrisTraversal {
         morrisPre(head);
         morrisIn(head);
         morrisPos(head);
+        System.out.println(isBST(head));
     }
 
 }
